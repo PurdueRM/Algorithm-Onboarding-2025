@@ -30,7 +30,7 @@ class ArmorDetectorNode : public rclcpp::Node {
         ArmorDetectorNode();
     private:
         rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr image_sub_;
-        std::unique_ptr<cv::VideoCapture> cap;
+        // std::unique_ptr<cv::VideoCapture> cap;
 
         int frame_count;
         

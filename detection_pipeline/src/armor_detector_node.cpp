@@ -13,15 +13,15 @@ ArmorDetectorNode::ArmorDetectorNode() : Node("armor_detector_node"), frame_coun
 void ArmorDetectorNode::image_callback(const sensor_msgs::msg::Image::SharedPtr msg)
 {
     cv::Mat frame;
-    *(this->cap) >> frame;
+    // *(this->cap) >> frame;
 
-    if (frame.empty())
-    {
-        this->cap->release();
-        cv::destroyAllWindows();
-        rclcpp::shutdown();
-        return;
-    }
+    // if (frame.empty())
+    // {
+    //     this->cap->release();
+    //     cv::destroyAllWindows();
+    //     rclcpp::shutdown();
+    //     return;
+    // }
 
     try {
         frame = cv_bridge::toCvCopy(msg, "bgr8")->image;
@@ -41,16 +41,10 @@ void ArmorDetectorNode::image_callback(const sensor_msgs::msg::Image::SharedPtr 
 
         draw_rotated_rect(frame, armors[0]);
         draw_rotated_rect(frame, armors[1]);
-
-        std::ofstream file("armor_points.csv", std::ios_base::app);
-        file << frame_count << "," << p0[0] << "," << p0[1] << "," << p1[0] << "," << p1[1] << std::endl;
-        file.close();
     }
     else
     {
-        std::ofstream file("armor_points.csv", std::ios_base::app);
-        file << frame_count << "," << "no armor found" << std::endl;
-        file.close();
+        std::cout << frame_count << "," << "no armor found" << std::endl;
     }
 
     if (frame_count % 5 == 0)
@@ -67,7 +61,7 @@ void ArmorDetectorNode::show_frame(cv::Mat &frame)
     cv::imshow("Detection Frame", cv::imdecode(buf, cv::IMREAD_COLOR));
     if (cv::waitKey(1) == 27)
     {
-        this->cap->release();
+        // this->cap->release();
         cv::destroyAllWindows();
         rclcpp::shutdown();
     }
